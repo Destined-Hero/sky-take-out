@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+    public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
@@ -78,7 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         System.out.println("当前线程的id"+Thread.currentThread().getId());
 
         Employee employee = new Employee();
-//      对象属性拷贝
+//      对象属性拷贝（前端json转java对象）
         BeanUtils.copyProperties(employeeDTO, employee);
 
         //设置账号状态属性默认值，0表示锁定
@@ -111,4 +111,48 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> records = page.getResult();
         return new PageResult(total, records);
     }
+    /**
+     * 启用禁用员工账号
+     * @param status
+     * @param id
+     */
+    public void startOrStop(Integer status, Long id){
+
+//        Employee employee = new Employee();
+//        employee.setStatus(status);
+//        employee.setId(id);
+
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 根据id查询员工信息
+     * @param id
+     * @return
+     */
+    public Employee getByid(Long id) {
+        Employee employee = employeeMapper.getById(id);
+        employee.setPassword("****");
+        return employee;
+    }
+
+    /**
+     * 修改员工信息
+     * @param employeeDTO
+     */
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.update(employee);
+    }
+
 }
