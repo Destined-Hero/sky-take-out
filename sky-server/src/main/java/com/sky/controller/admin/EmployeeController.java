@@ -16,8 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.PageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +35,6 @@ public class EmployeeController {
 
     /**
      * 登录
-     *
      * @param employeeLoginDTO
      * @return
      */
@@ -68,7 +65,6 @@ public class EmployeeController {
 
     /**
      * 退出
-     *
      * @return
      */
     @PostMapping("/logout")
@@ -86,7 +82,7 @@ public class EmployeeController {
         log.info("新增员工：{}", employeeDTO);
         System.out.println("当前线程的id"+Thread.currentThread().getId());
         employeeService.save(employeeDTO);
-        return Result.success("新增员工成功");
+        return Result.success();
     }
     /**
      * 分页查询
