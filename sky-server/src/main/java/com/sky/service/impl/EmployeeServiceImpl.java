@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -20,7 +19,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 
@@ -78,20 +76,24 @@ import java.util.Properties;
         System.out.println("当前线程的id"+Thread.currentThread().getId());
 
         Employee employee = new Employee();
-//      对象属性拷贝（前端json转java对象）
+     // 对象属性拷贝（前端json转java对象）
         BeanUtils.copyProperties(employeeDTO, employee);
 
         //设置账号状态属性默认值，0表示锁定
         employee.setStatus(StatusConstant.ENABLE);
-//      设置默认密码（md5加密方式）
+     // 设置默认密码（md5加密方式）
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-//      设置账号创建日期和修改日期
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-//      设置创建人和修改人
-        Long currentId = BaseContext.getCurrentId();
-        employee.setCreateUser(currentId);
-        employee.setUpdateUser(currentId);
+
+        /**
+         * 已通过公共字段自动填充添加属性
+         */
+     // 设置账号创建日期和修改日期
+     //   employee.setCreateTime(LocalDateTime.now());
+     //   employee.setUpdateTime(LocalDateTime.now());
+     // 设置创建人和修改人
+     //   Long currentId = BaseContext.getCurrentId();
+     //   employee.setCreateUser(currentId);
+     //   employee.setUpdateUser(currentId);
 
 //      数据打包好了插入持久层
         employeeMapper.insert(employee);
@@ -118,9 +120,9 @@ import java.util.Properties;
      */
     public void startOrStop(Integer status, Long id){
 
-//        Employee employee = new Employee();
-//        employee.setStatus(status);
-//        employee.setId(id);
+       // Employee employee = new Employee();
+       // employee.setStatus(status);
+       // employee.setId(id);
 
         Employee employee = Employee.builder()
                 .status(status)
@@ -149,8 +151,11 @@ import java.util.Properties;
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
 
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        /**
+         * 已通过公共字段自动填充添加属性
+         */
+       // employee.setUpdateTime(LocalDateTime.now());
+       // employee.setUpdateUser(BaseContext.getCurrentId());
 
         employeeMapper.update(employee);
     }
